@@ -99,6 +99,6 @@ L'exécution du script d'agrégation (`04_agregation_finale_iris.sql`) génère 
 │   └── 04_agregation_finale_iris.sql          # Grande fusion (LEFT JOIN, GROUP BY) autour des 117 IRIS
 ├── documentation/
 │   ├── Grille_Ponderation_BPE.pdf             # Matrice complète de pondération des équipements (11 pages)
-│   └── journal_de_bord.md                     # Documentation détaillée de l'ingénierie des données
+│   └── Journal_de_Bord.md                     # Documentation détaillée de l'ingénierie des données
 └── README.md
 ```
