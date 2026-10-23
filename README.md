@@ -4,24 +4,24 @@
 ---
 
 ## 🎯 1. Contexte et Problématique
-Le réseau de tramway d'Orléans Métropole (Lignes A et B) a été structuré au début des années 2000. Plus de vingt ans après, face aux mutations démographiques, à l'étalement périurbain et à l'émergence de nouvelles polarités d'emploi et de services, **comment objectiver les carences de desserte des 22 communes de la métropole (117 IRIS) ?**
+Le réseau de tramway d'Orléans Métropole (Lignes A et B) a été mis en service respectivement en 2000 et 2012. En 2026, face aux mutations démographiques, à l'étalement périurbain et à l'émergence de nouvelles polarités d'emploi et de services, **comment objectiver les carences de desserte des 22 communes de la métropole (117 IRIS) ?**
 
 Ce projet développe un **Transit Potential Score (TPS)** croisant deux dimensions complémentaires à l'échelle infracommunale (IRIS) :
 * **Le Potentiel Émetteur (Demande sociale) :** Volume démographique pondéré par la présence de publics captifs des transports collectifs (scolaires, étudiants, seniors, ouvriers en horaires décalés, personnes sans activité professionnelle).
-* **Le Potentiel Récepteur (Attractivité urbaine) :** Hiérarchisation et pondération des équipements générateurs de flux (gares, pôles hospitaliers, enseignement supérieur, commerces et services de proximité).
+* **Le Potentiel Récepteur (Attractivité urbaine) :** Hiérarchisation et pondération des équipements générateurs de flux (gares, pôles hospitaliers, enseignement supérieur et secondaire, commerces et services de proximité).
 
 ---
 
 ## 🏗️ 2. Architecture du Pipeline (4 Phases)
 
 * ✅ **Phase 1 — Ingénierie des données & Modélisation relationnelle (SQLite)** *(Terminée)*
-  * Extraction par requêtes non-destructives (`CTAS`), profilage des métadonnées INSEE, nettoyage des faux positifs, création de l'algorithme de scoring (`CASE WHEN`) et agrégation spatiale par IRIS.
+  * Extraction et nettoyage des données brutes, profilage des métadonnées INSEE, création de l'algorithme des scores et agrégation par IRIS.
 * ⏳ **Phase 2 — Intelligence Spatiale & Aide à la décision (QGIS & Power BI)** *(En cours)*
   * Pondération surfacique (calcul de la **densité réelle des besoins au km²** via la géométrie des polygones `$area`), normalisation Min-Max `[0-100]`, croisement avec les données GTFS du réseau TAO (isochrones piétons de 800m) et création d'un tableau de bord interactif pour les élus.
 * 📅 **Phase 3 — Industrialisation et Automatisation (Python)** *(À venir)*
-  * Automatisation de la collecte (API INSEE) et de l'exécution des scripts SQL.
+  * Automatisation de la collecte (API INSEE) et de l'exécution des scripts SQLite.
 * 📅 **Phase 4 — Conception multimodale & Insertion 3D (Blender / BlenderGIS)** *(À venir)*
-  * Modélisation 3D d'une station multimodale (*Transit-Oriented Development*) sur la polarité prioritaire identifiée par l'algorithme.
+  * Modélisation 3D d'une station ou d'une section de la potentielle future ligne.
 
 ---
 
@@ -33,18 +33,18 @@ Ce projet développe un **Transit Potential Score (TPS)** croisant deux dimensio
 * **Référentiel géographique :** [Table d'appartenance géographique des IRIS 2026](https://www.insee.fr/fr/information/7708995) *(Périmètre filtré : 22 communes / 117 IRIS d'Orléans Métropole)*.
 
 ### B. Modèle Émetteur (`score_pop`) : Pondération des publics captifs
-La population totale (`P22_POP`) constitue le socle de référence (**1 point par résident**). Afin d'éviter l'écueil du secret statistique inhérent aux bases fiscales (Filosofi/CAF) sur les petites communes périurbaines, la vulnérabilité socio-économique est modélisée par des variables *proxys* exhaustives issues du recensement :
+La population totale (`P22_POP`) constitue le socle de référence (**1 point par résident**). Afin d'éviter l'écueil du secret statistique inhérent aux bases fiscales (Filosofi/CAF) sur les petites communes périurbaines, la vulnérabilité socio-économique est modélisée par des variables *proxys* issues du recensement :
 
 | Variable INSEE | Public ciblé | Poids total | Formule SQL (Socle 1 + Bonus) | Justification mobilité |
 | :--- | :--- | :---: | :---: | :--- |
 | **`P22_POP`** | Population totale (Socle) | **x 1** | `1 * P22_POP` | Demande de mobilité standard d'un résident métropolitain. |
-| **`P22_POP1824`** | Jeunes & Étudiants (18-24 ans) | **x 3** | `+ (2 * P22_POP1824)` | Faible motorisation, budget contraint, flux massifs vers les campus. |
-| **`P22_POP1117`** | Collégiens & Lycéens (11-17 ans) | **x 3** | `+ (2 * P22_POP1117)` | 0 % de permis de conduire, captivité absolue aux heures de pointe. |
+| **`P22_POP1824`** | Jeunes & Étudiants (18-24 ans) | **x 3** | `+ (2 * P22_POP1824)` | Faible motorisation, budget contraint, flux massifs vers les campus et autres établissements supérieurs. |
+| **`P22_POP1117`** | Collégiens & Lycéens (11-17 ans) | **x 3** | `+ (2 * P22_POP1117)` | Motorisation quasi nulle, forte dépendance aux parents, flux massifs vers les établissements primaires et secondaires. |
 | **`GSEC16_26`** | Ouvriers (15 ans et +) | **x 2,5** | `+ (1.5 * GSEC16_26)` | Mobilité contrainte (pas de télétravail, horaires décalés, coût carburant). |
-| **`P22_POP65P`** | Seniors (65 ans et +) | **x 2** | `+ (1 * P22_POP65P)` | Dépendance croissante aux transports doux pour l'accès aux soins/commerces. |
+| **`P22_POP65P`** | Seniors (65 ans et +) | **x 2** | `+ (1 * P22_POP65P)` | Dépendance croissante aux transports pour l'accès aux soins/commerces. |
 | **`GSEC40`** | Sans activité pro (15 ans et +) | **x 2** | `+ (1 * GSEC40)` | Proxy de précarité nécessitant un désenclavement vers l'emploi et les services. |
 
-### C. Modèle Récepteur (`score_bpe`) : Stratification à 3 niveaux et nettoyage métier
+### C. Modèle Récepteur (`score_bpe`) : Stratification à 3 niveaux 
 Plutôt que de pondérer manuellement près de 200 codes `TYPEQU`, l'algorithme exploite une structure séquentielle `CASE WHEN` en entonnoir (du code précis `TYPEQU` vers le sous-domaine `SDOM` puis le domaine `DOM`), après élimination des « faux positifs » :
 
 | Niveau / Priorité SQL | Cible BPE (`TYPEQU` / `SDOM` / `DOM`) | Points | Justification urbaine & Arbitrages métiers |
@@ -80,9 +80,9 @@ L'exécution du script d'agrégation (`04_agregation_finale_iris.sql`) génère 
 | **9** | `452341401` | **Orléans** | Plantes-Dauphine | H | 3 955 | 126 | 7 218 | 1 206 | **8 424** |
 | **10**| `452840101` | **Saint-Jean-de-Braye**| Puits de Ville-Centre Ville | H | 3 873 | 135 | 6 949 | 1 190 | **8 139** |
 
-### 💡 Enseignements clés pour la Phase 2 (QGIS) :
+### 💡 Enseignements clefs pour la Phase 2 (QGIS) :
 1. **Validation des polarités majeures :** Le modèle fait ressortir avec précision les grands générateurs métropolitains (le quartier *Argonne* à forte captivité sociale, le pôle *Universités* qui culmine à 3 956 points récepteurs, le pôle multimodal de *Fleury Gare*, l'hypercentre *Carmes-République* ou les pôles commerciaux de *Saran*).
-2. **Nécessité de la pondération surfacique (Densité au km²) :** La présence en haut de classement de vastes polygones périurbains (comme *Saran Centre* avec 7 016 habitants ou la commune entière non-irisée d'*Ormes* de type `Z`) confirme notre hypothèse méthodologique : **un volume brut élevé sur une grande superficie dilue l'efficacité d'une station de tramway (isochrone piéton de 800m)**. Le passage sous QGIS (`Score_Brut / $area`) permettra de révéler la véritable hyper-densité urbaine.
+2. **Nécessité de la pondération surfacique (Densité au km²) :** La présence en haut de classement de vastes polygones périurbains (comme *Saran Centre* avec 7 016 habitants ou la commune entière non-irisée d'*Ormes*) confirme notre hypothèse méthodologique : **un volume brut peut être élevé alors qu'il concerne une grande superficie ce qui risque de diluer l'efficacité d'une station de tramway (attractivité piétonne fixée à 800m)**. Le passage sous QGIS (`Score_Brut / $area`) permettra de révéler les véritables pôles de densité urbaine.
 
 ---
 
