@@ -1,4 +1,4 @@
-# 🚊 Orléans Transit Potential Score (TPS)
+# Orléans Transit Potential Score (TPS)
 **Modélisation spatiale et ingénierie des données pour l'aide à la décision : identifier les « zones blanches » du réseau TAO et justifier par la donnée le tracé d'une 3ème ligne structurante (Tramway / BHNS) sur Orléans Métropole.**
 
 ---
@@ -14,13 +14,13 @@ Ce projet développe un **Transit Potential Score (TPS)** croisant deux dimensio
 
 ## 🏗️ 2. Architecture du Pipeline (4 Phases)
 
-* ✅ **Phase 1 — Ingénierie des données & Modélisation relationnelle (SQLite)** *(Terminée)*
+* **Phase 1 — Ingénierie des données & Modélisation relationnelle (SQLite)** *(Terminée)*
   * Extraction et nettoyage des données brutes, profilage des métadonnées INSEE, création de l'algorithme des scores et agrégation par IRIS.
-* ⏳ **Phase 2 — Intelligence Spatiale & Aide à la décision (QGIS & Power BI)** *(En cours)*
+* **Phase 2 — Intelligence Spatiale & Aide à la décision (QGIS & Power BI)** *(En cours)*
   * Pondération surfacique (calcul de la **densité réelle des besoins au km²** via la géométrie des polygones `$area`), normalisation Min-Max `[0-100]`, croisement avec les données GTFS du réseau TAO (isochrones piétons de 800m) et création d'un tableau de bord interactif pour les élus.
-* 📅 **Phase 3 — Industrialisation et Automatisation (Python)** *(À venir)*
+* **Phase 3 — Industrialisation et Automatisation (Python)** *(À venir)*
   * Automatisation de la collecte (API INSEE) et de l'exécution des scripts SQLite.
-* 📅 **Phase 4 — Conception multimodale & Insertion 3D (Blender / BlenderGIS)** *(À venir)*
+* **Phase 4 — Conception multimodale & Insertion 3D (Blender / BlenderGIS)** *(À venir)*
   * Modélisation 3D d'une station ou d'une section de la potentielle future ligne.
 
 ---
@@ -59,7 +59,7 @@ Plutôt que de pondérer manuellement près de 200 codes `TYPEQU`, l'algorithme 
 | **8. Commerces de rue** | `A304` (Auto-écoles) ou `DOM = 'B'` *(hors B1)* | **5 pts** | Tissu commercial de proximité et auto-écoles (public jeune non motorisé). |
 | **9. Services courants** | `ELSE` *(reste du domaine `A` : `A2`, `A5`)* | **2 pts** | Banques, bureaux de poste, coiffure, restauration rapide (effet cumulatif de mixité). |
 
-*(📄 La grille complète de pondération justifiée sur 11 pages est consultable dans [`/documentation/Grille_Ponderation_BPE.pdf`](documentation/Grille_Ponderation_BPE.pdf)).*
+*(La grille complète de pondération justifiée sur 11 pages est consultable dans [`/documentation/Grille_Ponderation_BPE.pdf`](documentation/Grille_Ponderation_BPE.pdf)).*
 
 ---
 
