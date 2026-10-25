@@ -3,7 +3,7 @@
 
 ---
 
-## 🎯 1. Contexte et Problématique
+## 1. Contexte et Problématique
 Le réseau de tramway d'Orléans Métropole (Lignes A et B) a été mis en service respectivement en 2000 et 2012. En 2026, face aux mutations démographiques, à l'étalement périurbain et à l'émergence de nouvelles polarités d'emploi et de services, **comment objectiver les carences de desserte des 22 communes de la métropole (117 IRIS) ?**
 
 Ce projet développe un **Transit Potential Score (TPS)** croisant deux dimensions complémentaires à l'échelle infracommunale (IRIS) :
@@ -12,7 +12,7 @@ Ce projet développe un **Transit Potential Score (TPS)** croisant deux dimensio
 
 ---
 
-## 🏗️ 2. Architecture du Pipeline (4 Phases)
+## 2. Architecture du Pipeline (4 Phases)
 
 * **Phase 1 — Ingénierie des données & Modélisation relationnelle (SQLite)** *(Terminée)*
   * Extraction et nettoyage des données brutes, profilage des métadonnées INSEE, création de l'algorithme des scores et agrégation par IRIS.
@@ -25,7 +25,7 @@ Ce projet développe un **Transit Potential Score (TPS)** croisant deux dimensio
 
 ---
 
-## ⚙️ 3. Méthodologie de Scoring (Phase 1 — SQLite)
+## 3. Méthodologie de Scoring (Phase 1 — SQLite)
 
 ### A. Sources de données mobilisées (INSEE)
 * **Démographie :** [Recensement de la population 2022 — Base infracommunale (IRIS)](https://www.insee.fr/fr/statistiques/8647014)
@@ -63,7 +63,7 @@ Plutôt que de pondérer manuellement près de 200 codes `TYPEQU`, l'algorithme 
 
 ---
 
-## 📊 4. Premiers Résultats (Sortie SQLite — Top 10 Brut sur 117 IRIS)
+## 4. Premiers Résultats (Sortie SQLite — Top 10 Brut sur 117 IRIS)
 
 L'exécution du script d'agrégation (`04_agregation_finale_iris.sql`) génère la table maîtresse [`SCORE_IRIS_ORLEANS.csv`](data_livrables/SCORE_IRIS_ORLEANS.csv). Voici les **10 premiers IRIS en volume brut** (avant pondération surfacique au km²) :
 
@@ -86,7 +86,7 @@ L'exécution du script d'agrégation (`04_agregation_finale_iris.sql`) génère 
 
 ---
 
-## 📂 5. Structure du Dépôt
+## 5. Structure du Dépôt
 
 ```text
 ├── data_livrables/
