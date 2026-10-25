@@ -80,7 +80,7 @@ L'exécution du script d'agrégation (`04_agregation_finale_iris.sql`) génère 
 | **9** | `452341401` | **Orléans** | Plantes-Dauphine | H | 3 955 | 126 | 7 218 | 1 206 | **8 424** |
 | **10**| `452840101` | **Saint-Jean-de-Braye**| Puits de Ville-Centre Ville | H | 3 873 | 135 | 6 949 | 1 190 | **8 139** |
 
-### 💡 Enseignements clefs pour la Phase 2 (QGIS) :
+### Enseignements clefs pour la Phase 2 (QGIS) :
 1. **Validation des polarités majeures :** Le modèle fait ressortir avec précision les grands générateurs métropolitains (le quartier *Argonne* à forte captivité sociale, le pôle *Universités* qui culmine à 3 956 points récepteurs, le pôle multimodal de *Fleury Gare*, l'hypercentre *Carmes-République* ou les pôles commerciaux de *Saran*).
 2. **Nécessité de la pondération surfacique (Densité au km²) :** La présence en haut de classement de vastes polygones périurbains (comme *Saran Centre* avec 7 016 habitants ou la commune entière non-irisée d'*Ormes*) confirme notre hypothèse méthodologique : **un volume brut peut être élevé alors qu'il concerne une grande superficie ce qui risque de diluer l'efficacité d'une station de tramway (attractivité piétonne fixée à 800m)**. Le passage sous QGIS (`Score_Brut / $area`) permettra de révéler les véritables pôles de densité urbaine.
 
