@@ -10,6 +10,12 @@ Ce projet développe un **Transit Potential Score (TPS)** croisant deux dimensio
 * **Le Potentiel Émetteur (Demande sociale) :** Volume démographique pondéré par la présence de publics captifs des transports collectifs (scolaires, étudiants, seniors, ouvriers en horaires décalés, personnes sans activité professionnelle).
 * **Le Potentiel Récepteur (Attractivité urbaine) :** Hiérarchisation et pondération des équipements générateurs de flux (gares, pôles hospitaliers, enseignement supérieur et secondaire, commerces et services de proximité).
 
+### 📚 Cadre théorique & Littérature scientifique
+Ce modèle s'inspire directement des travaux américains sur le **Transit Score Index** développés par la *Delaware Valley Regional Planning Commission (DVRPC)* et *NJ TRANSIT*, tout en les adaptant aux bases de données infracommunales françaises (INSEE) :
+* **Marchwinski, T. (2000).** *The 2020 Transit Score Report: Possibilities for the Future*, NJ TRANSIT Business Planning Department. *(Définition des seuils d'investissement entre bus local et transport en site propre / Fixed Guideway, et rayons d'attractivité piétonne de 400m vs 800m)*.
+* **Lutin, J. M., Krykewycz, G. R., Hacker, J. F., & Marchwinski, T. W. (2008).** *Transit Score: Screening Model for Evaluating Community Suitability for Transit Investments*, Transportation Research Record (TRR), No. 2063, pp. 115–124. *(Modélisation des origines par publics captifs — jeunes, seniors, ménages non motorisés — à l'échelle du Census Tract / IRIS).*
+* **Apport méthodologique du présent projet :** Là où L'étude de Lutin et al. (2008, p. 122) souligne la nécessité d'étendre le volet « Récepteur » au-delà des seuls trajets domicile-travail (*journey-to-work*), notre modèle exploite la **Base Permanente des Équipements (BPE)** pour intégrer les générateurs de flux hors-travail (enseignement supérieur, pôles hospitaliers, commerces, loisirs).
+
 ---
 
 ## 2. Architecture du Pipeline (4 Phases)
