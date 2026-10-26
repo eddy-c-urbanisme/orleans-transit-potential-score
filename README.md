@@ -90,15 +90,15 @@ L'exécution du script d'agrégation (`04_agregation_finale_iris.sql`) génère 
 
 ```text
 ├── data_livrables/
-│   ├── SCORE_IRIS_ORLEANS.csv                 # Table maîtresse agrégée (117 IRIS - Échelle Macro)
-│   └── BPE_ORLEANS_TPS.csv                    # Équipements géolocalisés en Lambert 93 (Échelle Micro)
+│   ├── SCORE_IRIS_ORLEANS.csv                 # Table maîtresse agrégée (117 IRIS avec le score TPS)
+│   └── BPE_ORLEANS_TPS.csv                    # Équipements géolocalisés en Lambert 93
 ├── scripts_sql/
 │   ├── 01_extraction_perimetre_orleans.sql    # Filtrage CTAS des 22 communes d'Orléans Métropole
 │   ├── 02_scoring_emetteur_population.sql     # Calcul du score démographique pondéré (score_pop)
-│   ├── 03_scoring_recepteur_equipements.sql   # Jointures sémantiques et algorithme CASE WHEN (score_bpe)
-│   └── 04_agregation_finale_iris.sql          # Grande fusion (LEFT JOIN, GROUP BY) autour des 117 IRIS
+│   ├── 03_scoring_recepteur_equipements.sql   # Calcul du score infrastructurel pondéré (score_bpe)
+│   └── 04_agregation_finale_iris.sql          # Fusion autour des 117 IRIS et création du score TPS
 ├── documentation/
 │   ├── Grille_Ponderation_BPE.pdf             # Matrice complète de pondération des équipements (11 pages)
-│   └── Journal_de_Bord.md                     # Documentation détaillée de l'ingénierie des données
+│   └── Journal_de_Bord.md                     # Description de mon projet et de mes méthodes
 └── README.md
 ```
