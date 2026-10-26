@@ -88,7 +88,12 @@ L'exécution du script d'agrégation (`04_agregation_finale_iris.sql`) génère 
 
 ### Enseignements clefs pour la Phase 2 (QGIS) :
 1. **Validation des polarités majeures :** Le modèle fait ressortir avec précision les grands générateurs métropolitains (le quartier *Argonne* à forte captivité sociale, le pôle *Universités* qui culmine à 3 956 points récepteurs, le pôle multimodal de *Fleury Gare*, l'hypercentre *Carmes-République* ou les pôles commerciaux de *Saran*).
-2. **Nécessité de la pondération surfacique (Densité au km²) :** La présence en haut de classement de vastes polygones périurbains (comme *Saran Centre* avec 7 016 habitants ou la commune entière non-irisée d'*Ormes*) confirme notre hypothèse méthodologique : **un volume brut peut être élevé alors qu'il concerne une grande superficie ce qui risque de diluer l'efficacité d'une station de tramway (attractivité piétonne fixée à 800m)**. Le passage sous QGIS (`Score_Brut / $area`) permettra de révéler les véritables pôles de densité urbaine.
+2. **Nécessité de la pondération surfacique (Densité au km²) :** La présence en haut de classement de vastes polygones périurbains (comme *Saran Centre* avec 7 016 habitants ou la commune entière non-irisée d'*Ormes*) confirme notre hypothèse méthodologique : **un volume brut peut être élevé alors qu'il concerne une grande superficie ce qui risque de diluer l'efficacité d'une station de tramway (attractivité piétonne fixée à 800m)**.
+
+### Limites identifiées du modèle SQL (Phase 1) et pistes d'amélioration :
+* **Rééquilibrage Émetteur / Récepteur (prévu en Phase 2) :** En volume brut, le poids démographique (`Score Émetteur`) domine numériquement le `Score Récepteur` (~80 % vs ~20 %). Sous QGIS et Power BI, chaque dimension sera d'abord ramenée à la superficie (`$area`) puis normalisée individuellement sur `[0-100]` avant d'être fusionnée à poids égal.
+* **Prise en compte de l'emploi privé non ouvert au public :** La base BPE capte finement les générateurs de flux publics et commerciaux (santé, enseignement, commerces), mais n'inclut pas les grands sites industriels ou logistiques fermés au public (ex: *Pôle 45*). Une évolution du modèle consisterait à croiser la BPE avec la base **SIRENE** (effectifs salariés) de l'INSEE.
+* **Effet frontière des IRIS (MAUP) :** Un équipement structurant situé à la frontière d'un IRIS rayonne sur les quartiers voisins. L'exportation de la couche ponctuelle `BPE_ORLEANS_TPS.csv` permettra en Phase 2 de générer un lissage spatial continu et des isochrones de marche réels affranchis des limites administratives.
 
 ---
 
