@@ -1,6 +1,8 @@
 # Orléans Transit Potential Score (TPS)
 **Modélisation spatiale et ingénierie des données pour l'aide à la décision : identifier les « zones blanches » du réseau TAO et justifier par la donnée le tracé d'une 3ème ligne structurante (Tramway / BHNS) sur Orléans Métropole.**
 
+*(Note : Ce projet est un Proof of Concept (PoC) personnel réalisé dans le cadre d'une montée en compétences sur le pipeline de données spatiales. Il propose une adaptation simplifiée des méthodes de scoring nord-américaines aux données en Open Data de l'INSEE).*
+
 ---
 
 ## 1. Contexte et Problématique
