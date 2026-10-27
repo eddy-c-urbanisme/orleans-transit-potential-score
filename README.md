@@ -14,7 +14,7 @@ Ce projet développe un **Transit Potential Score (TPS)** croisant deux dimensio
 Ce modèle s'inspire directement des travaux américains sur le **Transit Score Index** développés par la *Delaware Valley Regional Planning Commission (DVRPC)* et *NJ TRANSIT*, tout en les adaptant aux bases de données infracommunales françaises (INSEE) :
 * **Marchwinski, T. (2000).** *The 2020 Transit Score Report: Possibilities for the Future*, NJ TRANSIT Business Planning Department. *(Définition des seuils d'investissement entre bus local et transport en site propre, et rayons d'attractivité piétonne de 400m pour les bus et 800m pour les modes lourds)*.
 * **Lutin, J. M., Krykewycz, G. R., Hacker, J. F., & Marchwinski, T. W. (2008).** *Transit Score: Screening Model for Evaluating Community Suitability for Transit Investments*, Transportation Research Record (TRR), No. 2063, pp. 115–124. *(Modélisation des origines par publics captifs : jeunes, seniors, ménages non motorisés).*
-* **Apport méthodologique du présent projet :** Là où L'étude de Lutin et al. (2008, p. 122) souligne la nécessité d'étendre le volet « Récepteur » au-delà des seuls trajets domicile-travail (*journey-to-work*), notre modèle exploite la **Base Permanente des Équipements (BPE)** pour intégrer les générateurs de flux hors-travail (enseignement supérieur, pôles hospitaliers, commerces, loisirs).
+* **Apport méthodologique du présent projet :** Là où L'étude de Lutin et al. (2008, p. 122) souligne la nécessité d'étendre le volet « Récepteur » au-delà des seuls trajets domicile-travail (*journey-to-work*), notre modèle exploite la **Base Permanente des Équipements (BPE)** pour intégrer les générateurs de flux hors-travail (enseignement supérieur, pôles hospitaliers, etc.).
 
 ---
 
@@ -71,7 +71,7 @@ Plutôt que de pondérer manuellement près de 200 codes `TYPEQU`, l'algorithme 
 
 ## 4. Premiers Résultats (Sortie SQLite — Top 10 Brut sur 117 IRIS)
 
-L'exécution du script d'agrégation (`04_agregation_finale_iris.sql`) génère la table maîtresse [`SCORE_IRIS_ORLEANS.csv`](data_livrables/SCORE_IRIS_ORLEANS.csv). Voici les **10 premiers IRIS en volume brut** (avant pondération surfacique au km²) :
+L'exécution du script d'agrégation (`04_agregation_finale_iris.sql`) génère la table maîtresse [`SCORE_IRIS_ORLEANS.csv`](data_livrables/SCORE_IRIS_ORLEANS.csv). Voici les **10 premiers IRIS en volume brut** :
 
 | Rang | Code IRIS | Commune | Nom de l'IRIS | Type | Pop. Totale | Nb Équip. | Score Émetteur | Score Récepteur | **Score TPS Brut** |
 | :---: | :---: | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -86,13 +86,13 @@ L'exécution du script d'agrégation (`04_agregation_finale_iris.sql`) génère 
 | **9** | `452341401` | **Orléans** | Plantes-Dauphine | H | 3 955 | 126 | 7 218 | 1 206 | **8 424** |
 | **10**| `452840101` | **Saint-Jean-de-Braye**| Puits de Ville-Centre Ville | H | 3 873 | 135 | 6 949 | 1 190 | **8 139** |
 
-### Enseignements clefs pour la Phase 2 (QGIS) :
-1. **Validation des polarités majeures :** Le modèle fait ressortir avec précision les grands générateurs métropolitains (le quartier *Argonne* à forte captivité sociale, le pôle *Universités* qui culmine à 3 956 points récepteurs, le pôle multimodal de *Fleury Gare*, l'hypercentre *Carmes-République* ou les pôles commerciaux de *Saran*).
+### Analyse des résultats :
+1. **Validation des polarités majeures :** Le modèle fait ressortir avec précision les grands générateurs métropolitains (le quartier *Argonne* à forte captivité sociale, le pôle *Universités*, le pôle multimodal de *Fleury Gare*, l'hypercentre *Carmes-République* ou les pôles commerciaux de *Saran*).
 2. **Nécessité de la pondération surfacique (Densité au km²) :** La présence en haut de classement de vastes polygones périurbains (comme *Saran Centre* avec 7 016 habitants ou la commune entière non-irisée d'*Ormes*) confirme notre hypothèse méthodologique : **un volume brut peut être élevé alors qu'il concerne une grande superficie ce qui risque de diluer l'efficacité d'une station de tramway (attractivité piétonne fixée à 800m)**.
 
-### Limites identifiées du modèle SQL (Phase 1) et pistes d'amélioration :
+### Limites et pistes d'amélioration :
 * **Rééquilibrage Émetteur / Récepteur (prévu en Phase 2) :** En volume brut, le poids démographique (`Score Émetteur`) domine numériquement le `Score Récepteur` (~80 % vs ~20 %). Sous QGIS et Power BI, chaque dimension sera d'abord ramenée à la superficie (`$area`) puis normalisée individuellement sur `[0-100]` avant d'être fusionnée à poids égal.
-* **Prise en compte de l'emploi privé non ouvert au public :** La base BPE capte finement les générateurs de flux publics et commerciaux (santé, enseignement, commerces), mais n'inclut pas les grands sites industriels ou logistiques fermés au public (ex: *Pôle 45*). Une évolution du modèle consisterait à croiser la BPE avec la base **SIRENE** (effectifs salariés) de l'INSEE.
+* **Prise en compte de l'emploi privé non ouvert au public :** La base BPE de l'INSEE ne recense que les équipements, commerces et services ouverts au public. Cependant, elle n'inclut pas les grands sites industriels ou logistiques fermés au public (ex: *Pôle 45*). Une évolution du modèle consisterait à croiser la BPE avec la base **SIRENE** (effectifs salariés) de l'INSEE ou la base MOBPRO (flux domicile-travail).
 * **Effet frontière des IRIS (MAUP) :** Un équipement structurant situé à la frontière d'un IRIS rayonne sur les quartiers voisins. L'exportation de la couche ponctuelle `BPE_ORLEANS_TPS.csv` permettra en Phase 2 de générer un lissage spatial continu et des isochrones de marche réels affranchis des limites administratives.
 
 ---
